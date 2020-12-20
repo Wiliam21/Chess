@@ -73,17 +73,20 @@ void Chess::printPlays(int square, int finalState, list<int> nextMoves, int move
         if (path.size() <= MAX_MOVES_PER_WINNER_PLAY)
         {
             path.push_back(square);
+            path.pop_front();
             bool primer = true;
             for (int it : path)
             {
                 if (primer)
                 {
+                    wins << it;
+                    all << it;
                     primer = false;
                 }
                 else
                 {
-                    wins << it << " ";
-                    all << it << " ";
+                    wins << " " << it;
+                    all << " " << it;
                 }
             }
             wins << endl;
@@ -107,15 +110,17 @@ void Chess::printPlays(int square, int finalState, list<int> nextMoves, int move
     else if (movesCounter == TOTAL_PLAYS_PER_PLAYER)
     {
         bool primer = true;
+        path.pop_front();
         for (int it : path)
         {
             if (primer)
             {
                 primer = false;
+                all << it;
             }
             else
             {
-                all << it << " ";
+                all << " " << it;
             }
         }
         all << endl;
