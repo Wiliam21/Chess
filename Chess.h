@@ -63,7 +63,7 @@ void Chess::printPlaysFile(void)
 
 list<int> Chess::getNextMoves(int actual)
 {
-    return squaresMap.at(actual).getTotalMoves();
+    return squaresMap[actual].getTotalMoves();
 }
 
 void Chess::printPlays(int square, int finalState, list<int> nextMoves, int movesCounter, list<int> path)
@@ -73,13 +73,19 @@ void Chess::printPlays(int square, int finalState, list<int> nextMoves, int move
         if (path.size() <= MAX_MOVES_PER_WINNER_PLAY)
         {
             path.push_back(square);
+            bool primer = true;
             for (int it : path)
             {
-                wins << it << " ";
-                all << it << " ";
-                cout << it << " ";
+                if (primer)
+                {
+                    primer = false;
+                }
+                else
+                {
+                    wins << it << " ";
+                    all << it << " ";
+                }
             }
-            cout << endl;
             wins << endl;
             all << endl;
             return;
@@ -88,32 +94,37 @@ void Chess::printPlays(int square, int finalState, list<int> nextMoves, int move
     else if (movesCounter < TOTAL_PLAYS_PER_PLAYER)
     {
         path.push_back(square);
-        for (int it : path)
+        for (int it : nextMoves)
         {
             if (it != 0)
             {
                 totalIterations++;
                 movesCounter++;
-                printPlays(it, finalState, squaresMap.at(it).getTotalMoves(), movesCounter, path);
+                printPlays(it, finalState, squaresMap[it].getTotalMoves(), movesCounter, path);
             }
         }
     }
     else if (movesCounter == TOTAL_PLAYS_PER_PLAYER)
     {
+        bool primer = true;
         for (int it : path)
         {
-            all << it << " ";
-            cout << it << " ";
+            if (primer)
+            {
+                primer = false;
+            }
+            else
+            {
+                all << it << " ";
+            }
         }
         all << endl;
-        cout<<endl;
         return;
     }
 }
 
 void Chess::crearTablero()
 {
-    SquareMapItem squareMapItem;
     Square square;
     int counter = 1;
     char color;
@@ -122,6 +133,7 @@ void Chess::crearTablero()
     {
         for (int j = 0; j < ROWS_NUM; j++)
         {
+            SquareMapItem squareMapItem;
             squareMapItem.setRow(i);
             squareMapItem.setColumn(j);
             squaresMap.insert(pair<int, SquareMapItem>(counter, squareMapItem));
