@@ -10,5 +10,4 @@ int main()
     chess.abrirArchivos();
     chess.printPlaysFile();
     chess.cerrarArchivos();
-    cout<<chess.getTotalIterations();
 }
